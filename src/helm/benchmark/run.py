@@ -70,6 +70,7 @@ def run_benchmarking(
     run_specs: List[RunSpec],
     auth: Authentication,
     url: Optional[str],
+    port: int,
     local_path: str,
     num_threads: int,
     output_path: str,
@@ -87,6 +88,7 @@ def run_benchmarking(
     execution_spec = ExecutionSpec(
         auth=auth,
         url=url,
+        port=port,
         local_path=local_path,
         parallelism=num_threads,
         dry_run=dry_run,
@@ -111,6 +113,7 @@ def run_benchmarking(
 
 
 def add_run_args(parser: argparse.ArgumentParser):
+    parser.add_argument("-p", "--port", type=int, help="Port number to make remote requests", default=8080)
     parser.add_argument(
         "-o", "--output-path", type=str, help="Where to save all the output", default="benchmark_output"
     )
@@ -308,6 +311,7 @@ def main():
         run_specs=run_specs,
         auth=auth,
         url=args.server_url,
+        port=args.port,
         local_path=args.local_path,
         num_threads=args.num_threads,
         output_path=args.output_path,

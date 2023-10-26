@@ -39,13 +39,13 @@ class ServerService(Service):
     Main class that supports various functionality for the server.
     """
 
-    def __init__(self, base_path: str = "prod_env", root_mode=False, mongo_uri: str = ""):
+    def __init__(self, base_path: str = "prod_env", root_mode=False, mongo_uri: str = "", port: int = 8080):
         credentials = get_credentials(base_path)
         cache_path = os.path.join(base_path, CACHE_DIR)
         ensure_directory_exists(cache_path)
         accounts_path = os.path.join(base_path, ACCOUNTS_FILE)
 
-        self.client = AutoClient(credentials, cache_path, mongo_uri)
+        self.client = AutoClient(credentials, cache_path, mongo_uri, port)
         self.token_counter = AutoTokenCounter(self.client.get_huggingface_client())
         self.accounts = Accounts(accounts_path, root_mode=root_mode)
         # Lazily instantiated by get_toxicity_scores()

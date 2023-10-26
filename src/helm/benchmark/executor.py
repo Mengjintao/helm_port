@@ -21,6 +21,9 @@ class ExecutionSpec:
     # If non-empty, URL of the proxy server we send requests to (e.g., http://localhost:1959).
     url: Optional[str]
 
+    #The port
+    port: int
+
     # Pass into the service
     auth: Authentication
 
@@ -58,7 +61,7 @@ class Executor:
         elif execution_spec.local_path:
             hlog(f"Running in local mode with base path: {execution_spec.local_path}")
             self.service = ServerService(
-                base_path=execution_spec.local_path, root_mode=True, mongo_uri=execution_spec.mongo_uri
+                base_path=execution_spec.local_path, root_mode=True, mongo_uri=execution_spec.mongo_uri, port=execution_spec.port,
             )
         else:
             raise ValueError("Either the proxy server URL or the local path must be set")

@@ -38,10 +38,11 @@ class AutoClient(Client):
     This greatly speeds up the import time of this module, and allows the client modules to
     use optional dependencies."""
 
-    def __init__(self, credentials: Mapping[str, Any], cache_path: str, mongo_uri: str = ""):
+    def __init__(self, credentials: Mapping[str, Any], cache_path: str, mongo_uri: str = "", port: int = 8080):
         self.credentials = credentials
         self.cache_path = cache_path
         self.mongo_uri = mongo_uri
+        self.port = port
         self.clients: Dict[str, Client] = {}
         self.tokenizer_clients: Dict[str, Client] = {}
         # self._huggingface_client is lazily instantiated by get_huggingface_client()
@@ -88,7 +89,7 @@ class AutoClient(Client):
 
                 client = HuggingFaceClient(cache_config=cache_config)
             elif organization == "neurips":
-                client = HTTPModelClient(cache_config=cache_config)
+                client = HTTPModelClient(cache_config=cache_config, port=self.port)
             elif organization == "openai":
                 from helm.proxy.clients.openai_client import OpenAIClient
 
@@ -206,7 +207,7 @@ class AutoClient(Client):
 
                 client = HuggingFaceClient(cache_config=cache_config)
             elif organization == "neurips":
-                client = HTTPModelClient(cache_config=cache_config)
+                client = HTTPModelClient(cache_config=cache_config, port=self.port)
             elif organization in [
                 "bigscience",
                 "bigcode",
